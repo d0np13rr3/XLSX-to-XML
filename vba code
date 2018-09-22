@@ -1,0 +1,119 @@
+Sub MakeRSZXML()
+
+
+
+'Tel alle te verwerken rijen
+RowCount = Worksheets("XMLtest").Cells(Rows.Count, 1).End(xlUp).Row - 1
+
+MsgBox ("Aangiftes te doen: " & RowCount)
+
+'XML blad selecteren
+Sheets("XML").Select
+
+ActiveSheet.Range("a2:dz100").Select
+Selection.Delete
+
+Dim prow As Long
+Dim pcol As Long
+
+'Find the last non-blank cell in column A(1)
+    prow = Cells(Rows.Count, 1).End(xlUp).Row
+
+'Find the last non-blank cell in row 1
+    pcol = Cells(1, Columns.Count).End(xlToLeft).Column
+    
+
+ActiveSheet.Range(Cells(1, 1), Cells(1, pcol)).Select
+Selection.AutoFill Destination:=Range(Cells(1, 1), Cells(RowCount, pcol)), Type:=xlFillDefault
+Range(Cells(1, 1), Cells(RowCount - 1, pcol)).Select
+       
+
+
+'Opslaan als xml bestand
+
+'Variabelen declareren
+
+Dim myFile As String, rng As Range, cellValue As Variant, i As Integer, j As Integer, cellValue2 As Variant, Home As Variant, End2 As Variant, Home1 As Variant, Home2 As Variant, Header As Variant, End1 As Variant, Form As Variant, Form2 As Variant, Form3 As Variant, Form4 As Variant, Ref As Variant, Ref2 As Variant, Ref3 As Variant, Ref4 As Variant, Ref5 As Variant, Wcon As Variant, Wcon2 As Variant, Wcon3 As Variant, Wcon4 As Variant, Wcon5 As Variant, Wcon6 As Variant, Wcon7 As Variant, Wcon8 As Variant, Wcon9 As Variant, Wcon10 As Variant, Wcon11 As Variant, Wcon12 As Variant, Wcon13 As Variant, Wcon14 As Variant, Wcon15 As Variant, Wcon16 As Variant
+
+
+'Variabelen declaren voor range
+
+Dim lRow As Long
+Dim lCol As Long
+
+'Code om range te bepalen
+
+'Find the last non-blank cell in column A(1)
+    lRow = Cells(Rows.Count, 1).End(xlUp).Row
+    
+'Find the last non-blank cell in row 1
+    lCol = Cells(1, Columns.Count).End(xlToLeft).Column
+    
+
+    
+'Definieer XML bestand
+Header = Worksheets("DataXML").Range("A1")
+Home = Worksheets("DataXML").Range("A2")
+
+
+
+
+End2 = Worksheets("DataXML").Range("A6")
+
+
+'Pad en bestandsnaam bepalen
+
+company = Worksheets("Vaste waardenXML").Range("B27")
+
+myFile = Application.DefaultFilePath & "\aangifte" & company & ".xml"
+
+'Bepalen selectie
+Set rng = Range(Cells(1, 1), Cells(lRow, lCol))
+
+
+
+'Zo kunnen we het bestand schrijven
+Open myFile For Output As #1
+
+Print #1, Header
+Print #1, Home
+
+
+
+
+'Kolommen en rijen tellen
+
+For i = 1 To rng.Rows.Count
+
+For j = 1 To rng.Columns.Count
+
+
+
+'waarden van de cellen toe kennen
+cellValue = rng.Cells(i, j).Value
+
+
+'de waarden in het tekst bestand schrijven
+
+
+If j = rng.Columns.Count Then
+    Print #1, cellValue & vbCr
+Else
+    Print #1, cellValue & vbCr,
+   
+End If
+
+'bestand en loops sluiten
+    Next j
+Next i
+
+'einde XML schrijven
+
+Print #1, End2
+
+Close #1
+
+MsgBox ("Uw bestand is opglagen als: " & myFile & Chr(13) & Chr(13) & "Het aantal verwerkte aangiftes zijn: " & lRow)
+
+
+End Sub
